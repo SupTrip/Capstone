@@ -1,0 +1,184 @@
+body {
+  background: #c9c9c9;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.container {
+  background-image: url("/src/client/media/travel2.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#app {
+  display: none;
+  background: #615151;
+  width: -webkit-fill-available;
+  color: #ddbf14;
+  justify-content: center;
+  grid-gap: 1em;
+  font-size: 20px;
+  font-family: "Oswald", sans-serif;
+}
+
+.imgClass {
+  display: flex;
+  background: #615151;
+  width: 50%;
+  color: #ddbf14;
+  justify-content: center;
+  grid-gap: 1em;
+  font-size: 20px;
+  font-family: "Oswald", sans-serif;
+}
+
+.holder-entry {
+  display: flex;
+}
+
+.entry {
+  background: rgba(59, 74, 107, 0.4);
+}
+
+#entryHolder {
+  display: block;
+  font-size: 27px;
+}
+
+.title {
+  display: block;
+  font-size: 27px;
+}
+
+/*  Basic Styling To Override Default For Basic HTML Elements */
+
+label {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  display: block;
+  font-size: 27px;
+}
+
+#city_img {
+  display: inline-flex;
+}
+
+input {
+  height: 30px;
+  width: 320px;
+  color: #000000;
+  font-size: 20px;
+  font-family: "Oswald", sans-serif;
+  border: none;
+}
+
+#button {
+  width: 250px;
+  height: 50px;
+  background-color: orange;
+  color: aliceblue;
+  font-size: 23px;
+  font-family: "Oswald", sans-serif;
+  border: 15px;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px #444;
+  margin-left: 55px;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+/* Reset style for HTML element on active to have no border*/
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+/* Style for Placeholder Text*/
+
+::placeholder {
+  /* Firefox, Chrome, Opera */
+  color: #050505;
+  font-family: "Oswald", sans-serif;
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #080808;
+  font-family: "Oswald", sans-serif;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #000000;
+  font-family: "Oswald", sans-serif;
+}
+
+.holder-headline {
+  display: inline-flex;
+  background-color: #567556;
+  justify-content: flex-start;
+  padding: 10px;
+  margin: 10px;
+  font-size: x-large;
+  font-family: cursive;
+  color: aliceblue;
+}
+.imgClass {
+  width: 50%;
+}
+
+/* Medium devices (laptops/desktops,tablets, 768px and up) */
+
+@media only screen and (max-width: 1082px) {
+  #app {
+    flex-direction: column;
+    background-color: rgb(93, 167, 185);
+  }
+  .imgClass {
+    width: 50%;
+  }
+  .holder-entry {
+    flex-direction: column;
+  }
+}
+
+/* small devices (mobiles... */
+
+@media only screen and (max-width: 728px) {
+  header {
+    flex-direction: column;
+  }
+  #app {
+    flex-direction: column;
+    background-color: rgb(93, 167, 185);
+  }
+  .holder-entry {
+    flex-direction: column;
+  }
+  #city_img {
+    display: inline-flex;
+    width: 450px;
+  }
+  .imgClass {
+    width: 50%;
+  }
+  footer {
+    height: 45px;
+  }
+}
+
+@media only screen and (max-width: 568px) {
+  #city_img {
+    display: inline-flex;
+    width: 364px;
+  }
+  .imgClass {
+    width: 50%;
+  }
+  footer {
+    height: 77px;
+  }
+}
