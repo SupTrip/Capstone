@@ -24,14 +24,11 @@ const server = app.listen(port , ()=>{console.log(`the server running on localho
 
 
 var projectData = [];
-<<<<<<< HEAD
 var geoData =[];
 var imageData=[];
 var forecastData=[];
 
 
-=======
->>>>>>> 40d2698c402768d1ceb02b9a2c0d258a6c9ac0cc
 
 app.get('/all', sendData);
 
@@ -52,15 +49,9 @@ function postGeoData (req,res) {
 	// body...
 	console.log("postGeoData lat"+req.body.cityLat);
 	newEntry = {
-<<<<<<< HEAD
 		"latitude": req.body.cityLat,
 		"longitude": req.body.cityLong,
 		"country": req.body.dataCountry
-=======
-		"latitude": req.body.lat,
-		"longitude": req.body.lng,
-		"country": req.body.country
->>>>>>> 40d2698c402768d1ceb02b9a2c0d258a6c9ac0cc
 	}
 	
 	geoData.push(newEntry)
@@ -73,7 +64,6 @@ function postGeoData (req,res) {
 app.post('/addPhoto', addPhoto);
 function addPhoto (req, res) {
 	console.log("received log"+req.body);
-<<<<<<< HEAD
 	urlEntry = {
 		"photoUrl": req.body.photoUrl
 		}
@@ -97,11 +87,3 @@ function sendForecast(req, res)
 	res.send(forecastData);
 
 }
-
-
-=======
-	projectData.photoUrl= req.body.photoUrl;
-}
->>>>>>> 40d2698c402768d1ceb02b9a2c0d258a6c9ac0cc
-
-
