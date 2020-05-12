@@ -20,10 +20,10 @@
                 
                    <label for="Departure">When are you departing?</label>
                    <input type="date" id="Departure" name="trip-Departure"
-                  value="2020-05-13"
-                  min="2020-01-01" max="2020-12-31">
-                  <label for="Returning-Date">Returning Date:</label>
-                  <input type="date" id="Returning" name="trip-Returning"
+                   value="2020-05-13"
+                   min="2020-01-01" max="2020-12-31">
+                   <label for="Returning-Date">Returning Date:</label>
+                   <input type="date" id="Returning" name="trip-Returning"
                    value="2020-05-22"
                    min="2020-01-01" max="2020-12-31">
                    <div class ="holder city">
@@ -42,19 +42,30 @@
                 </div>
             <div id="entryHolder">
                     <div id="tripLocationTitle">Plan Trip to:</div>
+                    <div id="datediff"></div>
                     <div id="latitude"></div>
                     <div id="longitude"> </div>
-                    <div id="typicalWeatherTitle"></div>
-                    <div id="typicalWeather"></div>
-                    <div id="counterTitle"></div>
+                    <div id="country"> </div>
+                    <div id="hightemp"></div>
+                    <div id="lowTemp"></div>
+                    
+                    
              </div>
            </div>
 
     </div>
-
     </main>
     <script>
-      
+        
+            // Check that service workers are supported
+            if ('serviceWorker' in navigator) {
+                // Use the window load event to keep the page load performant
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js');
+                });
+            }
+        
 
-</script>
+</script> 
 </html>
+
