@@ -13,7 +13,7 @@ let weatherFetchError = "";
 let baseURLweather = "https://api.weatherbit.io/v2.0/current?";
 const apiKeyWeather = "a1d5b4fae1e3452384b0a66a9a3dcfe5";
 let forecastURLweather = "https://api.weatherbit.io/v2.0/forecast/daily?key=";
-var elapsedDays = 0.0;
+var duration = 0.0;
 var tempEntry = [];
 /* Global Variable to store Form Values*/
 
@@ -34,7 +34,7 @@ function performAction(e) {
   //console.log(arrDate + "Returning date");
 
   let upcomingtrvlduration = calculateDuration(currDate, depDate);
-  let duration = calculateDuration(depDate, arrDate);
+  duration  = calculateDuration(depDate, arrDate);
   
 
   getCity(baseURL, userCity, apiKey).then(function (data) {
@@ -96,7 +96,7 @@ function performAction(e) {
 
 function calculateDuration(startDate, endDate) {
   // To calculate the time difference of vacation date start and vacation date end
-  elapsedDays = endDate - startDate;
+  var elapsedDays = endDate - startDate;
   console.log("calculateDuration->elapsedDays" + elapsedDays);
   elapsedDays = elapsedDays / (1000 * 3600 * 24);
   // To calculate the no. of days between two dates
@@ -270,7 +270,7 @@ const updateUI = async () => {
     //apiData2=apiData;
     console.log("apiData photoUrl" + apiData1.photoUrl);
     document.getElementById("datediff").innerHTML =
-      "Trip upcoming in" + " " + elapsedDays + " Days";
+      "Trip length is " + " " + duration + " Days";
     document.getElementById("latitude").innerHTML =
       "Latitude:" + " " + apiData.latitude;
     document.getElementById("longitude").innerHTML =
@@ -294,3 +294,4 @@ const updateUI = async () => {
 
 export { performAction };
 export { calculateDuration };
+
