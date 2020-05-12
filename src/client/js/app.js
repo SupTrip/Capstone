@@ -1,4 +1,3 @@
-/* Global Variables */
 /* Global Variables for GeoNames*/
 const baseURL = `http://api.geonames.org/searchJSON?q=`;
 const apiKey = "&username=supnav";
@@ -14,18 +13,18 @@ let weatherFetchError = "";
 let baseURLweather = "https://api.weatherbit.io/v2.0/current?";
 const apiKeyWeather = "a1d5b4fae1e3452384b0a66a9a3dcfe5";
 let forecastURLweather = "https://api.weatherbit.io/v2.0/forecast/daily?key=";
-
+var elapsedDays = 0.0;
+var tempEntry = [];
 /* Global Variable to store Form Values*/
-
 
 function performAction(e) {
   e.preventDefault();
-var cityData=[];
-var weatherbitData=[];
-var photoUrlData=[];
-let userCity = "";
+  var cityData = [];
+  var weatherbitData = [];
+  var photoUrlData = [];
+  let userCity = "";
 
-userCity = document.getElementById("city").value;
+  userCity = document.getElementById("city").value;
   //This is getting the value from the input box for the start date
   let depDate = new Date(document.getElementById("Departure").value);
   let currDate = new Date();
@@ -36,22 +35,19 @@ userCity = document.getElementById("city").value;
 
   let upcomingtrvlduration = calculateDuration(currDate, depDate);
   let duration = calculateDuration(depDate, arrDate);
-  //console.log(duration + "duration");
-  //console.log(upcomingtrvlduration + "upcomingtrvlduration");
-
-  //  post data to weather Api to fetch weather forecast information
+  
 
   getCity(baseURL, userCity, apiKey).then(function (data) {
-    console.log("hello" + data.geonames[0].countryName);
+    console.log("hello::" + JSON.stringify(data));
     apiData = {
       latitude: data.geonames[0].lat,
       longitude: data.geonames[0].lng,
-      country: data.geonames[0].countryName,
+      cityName: data.geonames[0].name,
     };
     console.log(
       "apiData is" + apiData.latitude + apiData.longitude + apiData.country
     );
-    cityData=postCity("http://localhost:8000/postGeoData", {
+    cityData = postCity("http://localhost:8000/postGeoData", {
       latitude: data.geonames[0].lat,
       longitude: data.geonames[0].lng,
       country: data.geonames[0].countryName,
@@ -70,8 +66,18 @@ userCity = document.getElementById("city").value;
         console.log("weather data is" + weatherData.data.length);
 
         console.log("weather data is" + JSON.stringify(weatherData));
+
+        console.log("wlengtn value" + "" + weatherData.data[0].low_temp);
+        tempEntry = {
+          lowtemp: weatherData.data[0].low_temp,
+          hightemp: weatherData.data[0].high_temp,
+        };
+
         //postWeather('http://localhost:8000/sendForecast',{"lon":weatherData.lon,"lat":weatherData.lat});
-        weatherbitData=postWeather("http://localhost:8000/sendForecast", weatherData);
+        weatherbitData = postWeather(
+          "http://localhost:8000/sendForecast",
+          weatherData
+        );
       });
     } else {
       weatherFetchError = "Sorry Forecasted weather unavailable";
@@ -81,7 +87,7 @@ userCity = document.getElementById("city").value;
   getPhoto(pixabayEP, key, userCity).then(function (photoData) {
     apiData1 = { photoUrl: photoData.hits[0].largeImageURL };
     console.log(apiData1);
-    photoUrlData=postPhotoData("http://localhost:8000/addPhoto", {
+    photoUrlData = postPhotoData("http://localhost:8000/addPhoto", {
       photoUrl: photoData.hits[0].largeImageURL,
     });
     updateUI();
@@ -90,11 +96,12 @@ userCity = document.getElementById("city").value;
 
 function calculateDuration(startDate, endDate) {
   // To calculate the time difference of vacation date start and vacation date end
-  var elapsedDays = endDate - startDate;
+  elapsedDays = endDate - startDate;
   console.log("calculateDuration->elapsedDays" + elapsedDays);
-
+  elapsedDays = elapsedDays / (1000 * 3600 * 24);
   // To calculate the no. of days between two dates
-  return elapsedDays / (1000 * 3600 * 24);
+  console.log("elapsedDays=" + elapsedDays);
+  return elapsedDays;
 }
 
 const getCity = async (baseURL, city, key) => {
@@ -241,7 +248,7 @@ const postWeather = async (url = "", weatherData = {}) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({"weatherData":weatherData}),
+    body: JSON.stringify({ weatherData: weatherData }),
   });
   try {
     const newData = await response.json();
@@ -257,25 +264,33 @@ const updateUI = async () => {
   try {
     const allData = await request.json();
 
-    console.log("allData Length"+allData.length);
+    console.log("allData Length" + allData.length);
     console.log("allData=" + JSON.stringify(allData));
 
     //apiData2=apiData;
     console.log("apiData photoUrl" + apiData1.photoUrl);
-
-    document.getElementById("latitude").innerHTML ="latitude:" + " " + apiData.latitude;
-    document.getElementById("longitude").innerHTML ="Longitude:" + " " + apiData.longitude;
-    //document.getElementById('country').innerHTML = "Country:" + " " + apiData.country;
-    document.getElementById("city_picture").innerHTML ='<img class="imgClass  width=50%" src="' + apiData1.photoUrl + '" />';
+    document.getElementById("datediff").innerHTML =
+      "Trip upcoming in" + " " + elapsedDays + " Days";
+    document.getElementById("latitude").innerHTML =
+      "Latitude:" + " " + apiData.latitude;
+    document.getElementById("longitude").innerHTML =
+      "Longitude:" + " " + apiData.longitude;
+    document.getElementById("country").innerHTML =
+      "Travelling Destination:" + " " + apiData.cityName;
+    document.getElementById("city_picture").innerHTML =
+      '<img class="imgClass  width=50%" src="' + apiData1.photoUrl + '" />';
     // make changes in document object to show weather data.
-    document.getElementById("app").style.display="flex";
-    document.getElementById("button").scrollIntoView({ behavior: 'smooth'});
-         
-
-   
+    document.getElementById("app").style.display = "flex";
+    document.getElementById("button").scrollIntoView({ behavior: "smooth" });
+    document.getElementById("lowTemp").innerHTML =
+      "Low Temp:" + " " + tempEntry.lowtemp;
+    document.getElementById("hightemp").innerHTML =
+      "High Temp:" + " " + tempEntry.hightemp;
+    //console.log("updateUI->elapsedDays="+elapsedDays);
   } catch (error) {
     console.log("error", error);
   }
 };
 
 export { performAction };
+export { calculateDuration };
