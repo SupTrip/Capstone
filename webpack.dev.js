@@ -46,9 +46,12 @@ module.exports = {
             cleanStaleWebpackAssets: true,
             protectWebpackAssets: false
         }),
-
+        
         new WorkboxPlugin.GenerateSW(),
-        new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG']),
+       new webpack.EnvironmentPlugin({
+         NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+        DEBUG: false
+        }),
         new webpack.DefinePlugin ({
             "process.env.GEO_USERNAME": JSON.stringify('supnav')
         })
@@ -56,3 +59,4 @@ module.exports = {
     ]
     
 }
+
