@@ -1,6 +1,5 @@
 
-  
-/* Global Variables for GeoNames*/
+ /* Global Variables for GeoNames*/
 const baseURL = `http://api.geonames.org/searchJSON?q=`;
 const apiKey = "&username=supnav";
 var apiData = "";
@@ -40,59 +39,60 @@ function performAction(e) {
   
 
   getCity(baseURL, userCity, apiKey).then(function (data) {
-    //console.log("hello::" + JSON.stringify(data));
+    console.log("hello::" + JSON.stringify(data));
     apiData = {
       latitude: data.geonames[0].lat,
       longitude: data.geonames[0].lng,
       cityName: data.geonames[0].name,
     };
     console.log(
-      "apiData is" + apiData.latitude + apiData.longitude + apiData.cityName
+      "apiData is" + apiData.latitude + apiData.longitude + apiData.country
     );
-    /*cityData = postCity("http://localhost:8000/postGeoData", {
+    cityData = postCity("http://localhost:8000/postGeoData", {
       latitude: data.geonames[0].lat,
       longitude: data.geonames[0].lng,
       country: data.geonames[0].countryName,
-    });*/
+    });
 
-    //if (upcomingtrvlduration <= 16) {
-      //console.log("In 15 days duration");
-      }).then(function (apidata){
-        console.log(
-      "Chain2 apiData is" + apiData.latitude + apiData.longitude + apiData.cityName
-    );
-        const weatherData=getForecastedWeather(forecastURLweather,apiData.latitude,apiData.longitude,apiKeyWeather,upcomingtrvlduration)
-        console.log(
-      "Chain3 weatherData is" + JSON.stringify(weatherData)
-    );
-      }).then(function (weatherData) {
+    if (upcomingtrvlduration <= 16) {
+      console.log("In 15 days duration");
+      getForecastedWeather(
+        forecastURLweather,
+        apiData.latitude,
+        apiData.longitude,
+        apiKeyWeather,
+        upcomingtrvlduration
+      ).then(function (weatherData) {
         //obj = JSON.parse(weatherData);
-        //console.log("weather data is" + weatherData.data.length);
+        console.log("weather data is" + weatherData.data.length);
 
-        //console.log("weather data is" + JSON.stringify(weatherData));
+        console.log("weather data is" + JSON.stringify(weatherData));
 
-        //console.log("wlengtn value" + "" + weatherData.data[0].low_temp);
+        console.log("wlengtn value" + "" + weatherData.data[0].low_temp);
         tempEntry = {
           lowtemp: weatherData.data[0].low_temp,
           hightemp: weatherData.data[0].high_temp,
         };
 
         //postWeather('http://localhost:8000/sendForecast',{"lon":weatherData.lon,"lat":weatherData.lat});
-        /*weatherbitData = postWeather(
+        weatherbitData = postWeather(
           "http://localhost:8000/sendForecast",
           weatherData
-        );*/
-      })
-    /*} else {
+        );
+      });
+    } else {
       weatherFetchError = "Sorry Forecasted weather unavailable";
-    }*/
-  .then(getPhoto(pixabayEP, key, userCity).then(function (photoData) {
+    }
+  }).then(
+
+  getPhoto(pixabayEP, key, userCity).then(function (photoData) {
     apiData1 = { photoUrl: photoData.hits[0].largeImageURL };
     console.log(apiData1);
     photoUrlData = postPhotoData("http://localhost:8000/addPhoto", {
       photoUrl: photoData.hits[0].largeImageURL,
     });
-  })).then(updateUI());
+   
+  })).then(updateUI);
 }
 
 function calculateDuration(startDate, endDate) {
