@@ -1,5 +1,4 @@
-
- /* Global Variables for GeoNames*/
+/* Global Variables for GeoNames*/
 const baseURL = `http://api.geonames.org/searchJSON?q=`;
 const apiKey = "&username=supnav";
 var apiData = "";
@@ -18,27 +17,22 @@ var duration = 0.0;
 var tempEntry = [];
 /* Global Variable to store Form Values*/
 
-function performAction(e) {
+async function performAction(e) {
   e.preventDefault();
   var cityData = [];
   var weatherbitData = [];
   var photoUrlData = [];
   let userCity = "";
-
   userCity = document.getElementById("city").value;
   //This is getting the value from the input box for the start date
   let depDate = new Date(document.getElementById("Departure").value);
   let currDate = new Date();
   //This is getting the value from the input box for the end date
   const arrDate = new Date(document.getElementById("Returning").value);
-
   //console.log(arrDate + "Returning date");
-
   let upcomingtrvlduration = calculateDuration(currDate, depDate);
   duration  = calculateDuration(depDate, arrDate);
-  
-
-  getCity(baseURL, userCity, apiKey).then(function (data) {
+  await getCity(baseURL, userCity, apiKey).then(async function (data) {
     console.log("hello::" + JSON.stringify(data));
     apiData = {
       latitude: data.geonames[0].lat,
@@ -46,36 +40,32 @@ function performAction(e) {
       cityName: data.geonames[0].name,
     };
     console.log(
-      "apiData is" + apiData.latitude + apiData.longitude + apiData.country
+      "apiData is" + apiData.latitude + apiData.longitude + apiData.cityName
     );
-    cityData = postCity("http://localhost:8000/postGeoData", {
+    cityData = await postCity("http://localhost:8000/postGeoData", {
       latitude: data.geonames[0].lat,
       longitude: data.geonames[0].lng,
       country: data.geonames[0].countryName,
     });
-
     if (upcomingtrvlduration <= 16) {
       console.log("In 15 days duration");
-      getForecastedWeather(
+      await getForecastedWeather(
         forecastURLweather,
         apiData.latitude,
         apiData.longitude,
         apiKeyWeather,
         upcomingtrvlduration
-      ).then(function (weatherData) {
+      ).then(async function (weatherData) {
         //obj = JSON.parse(weatherData);
         console.log("weather data is" + weatherData.data.length);
-
         console.log("weather data is" + JSON.stringify(weatherData));
-
         console.log("wlengtn value" + "" + weatherData.data[0].low_temp);
         tempEntry = {
           lowtemp: weatherData.data[0].low_temp,
           hightemp: weatherData.data[0].high_temp,
         };
-
         //postWeather('http://localhost:8000/sendForecast',{"lon":weatherData.lon,"lat":weatherData.lat});
-        weatherbitData = postWeather(
+        weatherbitData = await postWeather(
           "http://localhost:8000/sendForecast",
           weatherData
         );
@@ -84,17 +74,14 @@ function performAction(e) {
       weatherFetchError = "Sorry Forecasted weather unavailable";
     }
   }).then(
-
-  getPhoto(pixabayEP, key, userCity).then(function (photoData) {
+  await getPhoto(pixabayEP, key, userCity).then(function (photoData) {
     apiData1 = { photoUrl: photoData.hits[0].largeImageURL };
     console.log(apiData1);
     photoUrlData = postPhotoData("http://localhost:8000/addPhoto", {
       photoUrl: photoData.hits[0].largeImageURL,
     });
-   
   })).then(updateUI);
 }
-
 function calculateDuration(startDate, endDate) {
   // To calculate the time difference of vacation date start and vacation date end
   var elapsedDays = endDate - startDate;
@@ -104,7 +91,6 @@ function calculateDuration(startDate, endDate) {
   console.log("elapsedDays=" + elapsedDays);
   return elapsedDays;
 }
-
 const getCity = async (baseURL, city, key) => {
   const res = await fetch(baseURL + city + key);
   try {
@@ -117,7 +103,6 @@ const getCity = async (baseURL, city, key) => {
 };
 const postCity = async (url = "", geodata = {}) => {
   console.log(JSON.stringify(geodata));
-
   const response = await fetch(url, {
     method: "POST",
     credentials: "same-origin",
@@ -132,13 +117,11 @@ const postCity = async (url = "", geodata = {}) => {
   });
   try {
     const newData = await response.json();
-
     return newData;
   } catch (error) {
     console.log("error", error);
   }
 };
-
 const getPhoto = async (pixabayEP, key, city) => {
   const res = await fetch(pixabayEP + key + "&q=" + city);
   try {
@@ -149,7 +132,6 @@ const getPhoto = async (pixabayEP, key, city) => {
     console.log("error", error);
   }
 };
-
 const postPhotoData = async (url = "", photoData = {}) => {
   console.log("PhotoData" + JSON.stringify(photoData));
   const response = await fetch(url, {
@@ -162,12 +144,14 @@ const postPhotoData = async (url = "", photoData = {}) => {
   });
   try {
     const newData = await response.json();
-
     return newData;
   } catch (error) {
     console.log("error", error);
   }
 };
+
+
+
 
 const getCurrentWeather = async (
   baseURLweather,
