@@ -5,19 +5,20 @@ var apiData = "";
 var apiData2 = "";
 /* Global Variables for Pixabay*/
 let apiData1 = "";
-let pixabayEP = "https://pixabay.com/api/?key=";
-let key = "16358191-fd4c471105557c199f122e3ba";
+let pixabayEP="https://pixabay.com/api/?key=";
+let pixakey="16358191-fd4c471105557c199f122e3ba";
 let weatherFetchError = "";
 /* Global Variables for Weatherbit*/
 
 let baseURLweather = "https://api.weatherbit.io/v2.0/current?";
-const apiKeyWeather = "a1d5b4fae1e3452384b0a66a9a3dcfe5";
+const apiKeyWeather="a1d5b4fae1e3452384b0a66a9a3dcfe5";
 let forecastURLweather = "https://api.weatherbit.io/v2.0/forecast/daily?key=";
 var duration = 0.0;
 var tempEntry = [];
 /* Global Variable to store Form Values*/
 
-async function performAction(e) {
+
+ const performAction = async (e) =>{
   e.preventDefault();
   var cityData = [];
   var weatherbitData = [];
@@ -72,7 +73,7 @@ async function performAction(e) {
       weatherFetchError = "Sorry Forecasted weather unavailable";
     }
   }).then(
-  await getPhoto(pixabayEP, key, userCity).then(function (photoData) {
+  await getPhoto(pixabayEP, pixakey, userCity).then(function (photoData) {
     apiData1 = { photoUrl: photoData.hits[0].largeImageURL };
     //console.log(apiData1);
     photoUrlData = postPhotoData("http://localhost:8000/addPhoto", {
